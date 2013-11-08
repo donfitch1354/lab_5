@@ -20,9 +20,20 @@ void clearPlayer(unsigned char player){
 
 
 unsigned char movePlayer(unsigned char player, unsigned char direction){
-	switch (direction) {
-	                // update player position based on direction of movement
+	 {
+	               if(direction==1){
+	            	   player += 40;
+	       	               }
 
+	               if (direction ==2){
+	            	   player-=40;
+	               }
+	               if (direction == 3){
+	            	   player -=1;
+	               }
+	               if (direction ==4){
+	            	   player +=1;
+	               }
 	}        return player;
 }
 

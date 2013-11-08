@@ -24,9 +24,33 @@ int main(void){
 
 
 while(1)        {
-		 if (timer_Interrupted=1){
-			count++;
+		 if (timer_Interrupted==1){
+			 total_Timer_Interrupts++;
+			 if(total_Timer_Interrupts==8){
+				 timed_Out=1;
+			 }
 		 }
+		 if (timed_Out){
+			 LCDclear();
+			 total_Timer_Interrupts=0;
+			 button_Was_Pushed=0;
+			 count=9;
+			 timed_Out=0;
+			 player=initPlayer();
+			 while(count){
+				 writeDataByte(stringGameLost[count]);
+				 count--;
+				 }
+			 while (!button_Was_Pushed){
+				 //burn power
+			 }
+			 printPlayer(player);
+		 }
+
+
+
+
+
 
 
 	     if (button_Was_Pushed){
@@ -34,19 +58,20 @@ while(1)        {
 	    	 total_Timer_Interrupts=0;
 	    	 button_Was_Pushed=0;
 
-	    	 if (didPlayerWin()){
+	    	 if (didPlayerWin(player)){
 	    	 		 gameWon=1;
 	    	 	 }
 	    	 else{
-	    	 		 player=movePlayer(player, direction);
+	    	 		 player=movePlayer(player, button_Pushed_Direction);
 	    	 		 printPlayer(player);
 
 	    	 	 }
-	    	 if (gamewon){
+	    	 if (gameWon){
 	    	 		 LCDclear();
 	    	 		 count=9;
-	    	 		 player=playerInit();
+	    	 		 player=initPlayer();
 	    	 		 button_Was_Pushed=0;
+	    	 		 gameWon=0;
 	    	 		 while(count){
 	    	 			writeDataByte(stringGameWon[count]);
 	    	 			count--;
@@ -56,24 +81,12 @@ while(1)        {
 	    	 			    	 			}
 
 
-
-
-
-
-
-
-
+	    	 		printPlayer(player);
 
 
 	     }
-	    //  clear current player marker                 *
-	     // update player position based on direction                 *
-	     // print new player                 *
-	     // clear two second timer                 *
-	    //  wait for button release (you can poll here)                 * }                 *
-	    //  print game over or you won, depending on game result                 *                 *
-	     // wait for button press to begin new game (you can poll here)                 *
-	    //  wait for release before starting again                 */
+
+
 }
 
 	}
@@ -85,7 +98,7 @@ __interrupt void TIMER0_A1_ISR(void)
 		 TACTL &= ~TAIFG;
 
 }
-//documentation on this part: I got this (the idea and method) from C2C Peyton McBee (he is in my squad and is the go to guy if I have problems)
+//documentation on this part: I got this (the idea and method) from C2C Payden McBee (he is in my squad and is the go to guy if I have problems)
 __interrupt void Port_1_ISR(void)
 {
 		if(P1IFG & BIT1)
@@ -140,49 +153,3 @@ __interrupt void Port_1_ISR(void)
 		}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

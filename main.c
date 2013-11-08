@@ -32,7 +32,11 @@ while(1)        {
 	 *    wait for button press to begin new game (you can poll here)                 *
 	 *    wait for release before starting again                 */
 	}        return 0;}
-// // YOUR TIMER A ISR GOES HERE//
+__interrupt void TIMER0_A1_ISR(void)
+{ 		 out_Of_Time = 1;
+		 TACTL &= ~TAIFG;
+
+}
 void init_timer(){
 		 TACTL &= ~(MC1|MC0);  // stop timer
 
@@ -47,7 +51,7 @@ void init_timer(){
 		 TACTL |= MC1;        // set timer mode to continuous
 
 		 TACTL |= TAIE;       // enable interrupt
-
+}
 void init_buttons(){
 	   	 P1DIR &= ~(BIT1|BIT2|BIT3|BIT4);  // set buttons 1-4 to inputs for reading later
 
@@ -61,5 +65,4 @@ void init_buttons(){
 
 	   	 P1IFG &=~(BIT1|BIT2|BIT3|BIT4);   // clear flags for buttons 1-4
 
-}
 }

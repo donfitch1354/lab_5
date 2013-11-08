@@ -27,7 +27,7 @@ void initSPI(){
 
 			UCB0CTL1 |= UCSSEL1;                        // select a clock to use!
 
-			//UCB0STAT |= UCLISTEN;                       // enables internal loopback
+
 
 			P1DIR|= BIT3;
 

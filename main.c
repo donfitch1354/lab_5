@@ -34,8 +34,32 @@ while(1)        {
 	}        return 0;}
 // // YOUR TIMER A ISR GOES HERE//
 void init_timer(){
-	// do timer initialization work}
+		 TACTL &= ~(MC1|MC0);  // stop timer
+
+		 TACTL |= TASSEL1;    // clear TAR
+
+		 TACTL |= TASSEL1;    // configure for SMCLK
+
+		 TACTL |= ID1|ID0;    // divide clock by 8
+
+		 TACTL &= ~TAIFG;
+
+		 TACTL |= MC1;        // set timer mode to continuous
+
+		 TACTL |= TAIE;       // enable interrupt
+
 void init_buttons(){
-	// do button initialization work}
+	   	 P1DIR &= ~(BIT1|BIT2|BIT3|BIT4);  // set buttons 1-4 to inputs for reading later
+
+	   	 P1IE |= BIT1|BIT2|BIT3|BIT4;      // turn on the interrupts for the buttons (will just trigger 1 interrupt)
+
+	   	 P1IES |= BIT1|BIT2|BIT3|BIT4;     // falling edge configuration
+
+	   	 P1REN |= BIT1|BIT2|BIT3|BIT4;     // set buttons to pull up/pull down resistors
+
+	   	 P1OUT |= BIT1|BIT2|BIT3|BIT4;     // since resistors are enabled as pull up or pull down, set them as pull up.
+
+	   	 P1IFG &=~(BIT1|BIT2|BIT3|BIT4);   // clear flags for buttons 1-4
+
 }
 }

@@ -7,6 +7,25 @@ unsigned char initPlayer(){
 }
 
 
+char checkBounds(char player){
+	if (player<=0xC7 && player >=0xC0){
+
+		return 1;
+	}
+	if (player>=80 && player <= 87){
+		return 1;
+	}
+	else return 0;
+
+
+
+}
+
+
+
+
+
+
 void printPlayer(unsigned char player){
 	writeCommandByte(player);
 	writeDataByte('*');

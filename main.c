@@ -6,13 +6,14 @@
 
 int main(void){
 	WDTCTL = (WDTPW|WDTHOLD);
+
 		player = initPlayer();
 
-	  //  init_timer();
+	    init_timer();
 
         init_buttons();
 
-       // __enable_interrupt();
+        __enable_interrupt();
 
         initSPI();
 
@@ -20,6 +21,7 @@ int main(void){
 
         LCDclear();
 
+        printPlayer(player);
 
 
 
@@ -33,18 +35,19 @@ while(1)        {
 		 if (timed_Out){
 			 LCDclear();
 			 total_Timer_Interrupts=0;
-			 button_Was_Pushed=0;
 			 count=9;
 			 timed_Out=0;
 			 player=initPlayer();
+			 button_Was_Pushed=0;
 			 while(count){
 				 writeDataByte(stringGameLost[count]);
 				 count--;
 				 }
 			 while (!button_Was_Pushed){
-				 //burn power
+				 //burn power and wait for button push
 			 }
 			 printPlayer(player);
+			 button_Was_Pushed=0;
 		 }
 
 
@@ -54,6 +57,11 @@ while(1)        {
 
 
 	     if (button_Was_Pushed){
+	    	 if(!checkBounds(player)){
+	    		 player=initPlayer(); // you went out of bounds... go directly to jail and do not pass go (restarts game position as penalty for running out)
+	    	 }
+	    	 else{
+
 	    	 LCDclear();
 	    	 total_Timer_Interrupts=0;
 	    	 button_Was_Pushed=0;
@@ -77,15 +85,15 @@ while(1)        {
 	    	 			count--;
 	    	    	    	 	 }
 	    	 		while(!button_Was_Pushed){
-	    	 			    	 				//burn power
+	    	 			    	 				//burn power and wait for button push
 	    	 			    	 			}
 
 
 	    	 		printPlayer(player);
-
+	    	 		button_Was_Pushed=0;
 
 	     }
-
+	    	 }
 
 }
 

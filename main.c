@@ -1,68 +1,165 @@
 #include <msp430.h>
 #include "lab_5.h"
 #include "LCD.h"
-void init_timer();
-void init_buttons();
+
+
 
 int main(void){
 	WDTCTL = (WDTPW|WDTHOLD);
-unsigned char player = initPlayer();
+//unsigned char player = initPlayer();
 
-init_timer();
+	  //  init_timer();
 
-init_buttons();
+        init_buttons();
 
-__enable_interrupt();
+       // __enable_interrupt();
+
+        initSPI();
+
+        LCDinit();
+
+        LCDclear();
 
 
 
 
 while(1)        {
-	/*                 *
-	 *
-	 *  while (game is on)                 *
-	 *   {                 *                 check if button is pushed (you don't want to block here, so don't poll!)                 *
-	 *   if button is pushed:                 *
-	 *    clear current player marker                 *
-	 *    update player position based on direction                 *
-	 *    print new player                 *
-	 *    clear two second timer                 *
-	 *    wait for button release (you can poll here)                 * }                 *
-	 *    * print game over or you won, depending on game result                 *                 *
-	 *    wait for button press to begin new game (you can poll here)                 *
-	 *    wait for release before starting again                 */
-	}        return 0;}
+
+
+	    while (game_Still_On)
+	     {
+	     if (button_Was_Pushed){
+	    	 LCDclear();
+
+
+
+
+
+
+
+
+
+
+
+
+	     }
+	    //  clear current player marker                 *
+	     // update player position based on direction                 *
+	     // print new player                 *
+	     // clear two second timer                 *
+	    //  wait for button release (you can poll here)                 * }                 *
+	    //  print game over or you won, depending on game result                 *                 *
+	     // wait for button press to begin new game (you can poll here)                 *
+	    //  wait for release before starting again                 */
+}
+
+	}
+}
+
+
 __interrupt void TIMER0_A1_ISR(void)
-{ 		 out_Of_Time = 1;
+{ 		 timer_Interrupted = 1;
 		 TACTL &= ~TAIFG;
 
 }
-void init_timer(){
-		 TACTL &= ~(MC1|MC0);  // stop timer
+//documentation on this part: I got this (the idea and method) from C2C Peyton McBee (he is in my squad and is the go to guy if I have problems)
+__interrupt void Port_1_ISR(void)
+{
+		if(P1IFG & BIT1)
+		{
+			P1IFG &= ~BIT1; // clear the flag set when the button for right was pushed
+			if(BIT1 & P1IES)
+			{
+				 button_Pushed_Direction=RIGHT;
+				 button_Was_Pushed=1;
 
-		 TACTL |= TASSEL1;    // clear TAR
+			}
+			else
+			{
+				delay1(); //debounce
+			}
+			// part below is in case a button is pushed that isn't one of the four.
+			P1IES ^= BIT1;
+			P1IFG &= ~BIT1;
+		}
+		if(P1IFG & BIT2)
+		{
+			P1IFG &= ~BIT2; 			// clear flag
 
-		 TACTL |= TASSEL1;    // configure for SMCLK
+			if(BIT2 & P1IES)
+			{
 
-		 TACTL |= ID1|ID0;    // divide clock by 8
+				button_Pushed_Direction=LEFT;
+				button_Was_Pushed=1;
+			}
+			else
+			{
+				delay2(); //debounce
+			}
+			P1IES ^= BIT2;
+			P1IFG &= ~BIT2;
+		}
+		if(P1IFG & BIT4)
+		{
+			P1IFG &= ~BIT4;
+			if(BIT4& P1IES)
+			{
+				button_Was_Pushed=1;
+				button_Pushed_Direction=DOWN;
+			}
+			else
+			{
+					delay2();
+			}
+		P1IES ^= BIT4;
+		P1IFG &= ~BIT4;
 
-		 TACTL &= ~TAIFG;
+		}
 
-		 TACTL |= MC1;        // set timer mode to continuous
-
-		 TACTL |= TAIE;       // enable interrupt
 }
-void init_buttons(){
-	   	 P1DIR &= ~(BIT1|BIT2|BIT3|BIT4);  // set buttons 1-4 to inputs for reading later
 
-	   	 P1IE |= BIT1|BIT2|BIT3|BIT4;      // turn on the interrupts for the buttons (will just trigger 1 interrupt)
 
-	   	 P1IES |= BIT1|BIT2|BIT3|BIT4;     // falling edge configuration
 
-	   	 P1REN |= BIT1|BIT2|BIT3|BIT4;     // set buttons to pull up/pull down resistors
 
-	   	 P1OUT |= BIT1|BIT2|BIT3|BIT4;     // since resistors are enabled as pull up or pull down, set them as pull up.
 
-	   	 P1IFG &=~(BIT1|BIT2|BIT3|BIT4);   // clear flags for buttons 1-4
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

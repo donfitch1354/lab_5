@@ -7,12 +7,14 @@
 #define LEFT 3
 #define RIGHT 4
 #define ROW_MASK 0x40
-#define NUM_MINES 2//// Initializes player to starting position on board.//
 unsigned char initPlayer();//// Prints the player marker (*) at the player location passed in.//
 void printPlayer(unsigned char player);//// Clears the location passed in.//
 void clearPlayer(unsigned char player);//// Given a player's current position and a direction, returns an updated player position.//
 unsigned char movePlayer(unsigned char player, unsigned char direction);//// Returns true if the position passed in is the winning game position.//
 char didPlayerWin(unsigned char player);
-char didPlayerHitMine(unsigned char player, unsigned char mines[NUM_MINES]);
-void generateMines(unsigned char mines[NUM_MINES]);
-void printMines(unsigned char mines[NUM_MINES]);
+void init_timer();
+void init_buttons();
+char game_Still_On =1;
+char button_Was_Pushed =0;
+char button_Pushed_Direction;
+char timer_Interrupted =0;

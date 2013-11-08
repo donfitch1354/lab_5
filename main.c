@@ -6,7 +6,7 @@
 
 int main(void){
 	WDTCTL = (WDTPW|WDTHOLD);
-//unsigned char player = initPlayer();
+		player = initPlayer();
 
 	  //  init_timer();
 
@@ -24,13 +24,36 @@ int main(void){
 
 
 while(1)        {
+		 if (timer_Interrupted=1){
+			count++;
+		 }
 
 
-	    while (game_Still_On)
-	     {
 	     if (button_Was_Pushed){
 	    	 LCDclear();
+	    	 total_Timer_Interrupts=0;
+	    	 button_Was_Pushed=0;
 
+	    	 if (didPlayerWin()){
+	    	 		 gameWon=1;
+	    	 	 }
+	    	 else{
+	    	 		 player=movePlayer(player, direction);
+	    	 		 printPlayer(player);
+
+	    	 	 }
+	    	 if (gamewon){
+	    	 		 LCDclear();
+	    	 		 count=9;
+	    	 		 player=playerInit();
+	    	 		 button_Was_Pushed=0;
+	    	 		 while(count){
+	    	 			writeDataByte(stringGameWon[count]);
+	    	 			count--;
+	    	    	    	 	 }
+	    	 		while(!button_Was_Pushed){
+	    	 			    	 				//burn power
+	    	 			    	 			}
 
 
 

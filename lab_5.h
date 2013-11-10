@@ -7,18 +7,6 @@
 #define LEFT 3
 #define RIGHT 4
 #define ROW_MASK 0x40
-char player;
-char gameWon=0;
-char count=0;
-char game_Still_On =1;
-char timed_Out =0;
-char button_Pushed_Direction;
-char timer_Interrupted =0;
-char total_Timer_Interrupts =0;
-char gameWon;
-char button_Was_Pushed=0;
-char stringGameWon[]="Game Won!";
-char stringGameLost[]="Game Over";
 unsigned char movePlayer(unsigned char player, unsigned char direction);//// Given a player's current position and a direction, returns an updated player position.//
 char didPlayerWin(unsigned char player);//// Returns true if the position passed in is the winning game position.//
 void printPlayer(unsigned char player);//// Prints the player marker (*) at the player location passed in.//
